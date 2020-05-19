@@ -110,7 +110,7 @@ markers = [plt.polar([.6],[i], marker='X', color=d['color'], markersize=18,
             for i, d in enumerate(players)]
 
 # names/colors/current turn legend with wedge tracker
-legend = plt.legend(loc='upper left', prop={'weight': 'bold', 'size':10},
+legend = plt.legend(loc='upper left', prop={'weight': 'bold', 'size': 18},
                     bbox_to_anchor=(1, 1), markerscale=0, handlelength=0,
                     handletextpad=0, frameon=False)
 for i, l in enumerate(legend.get_texts()):
