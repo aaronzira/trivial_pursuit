@@ -87,7 +87,8 @@ rs = np.concatenate([p_r, s_r])
 lines = []
 
 # for 'manual' legend and key to topics
-fig, ax = plt.subplots(1, 2, figsize=(13, 9))
+fig, ax = plt.subplots(1, 2, figsize=(11, 9))
+plt.subplots_adjust(left=-0.1)
 ax[0].set_axis_off()
 ax[1].set_axis_off()
 
@@ -122,7 +123,7 @@ markers = [plt.polar([.6], [i], marker='X', color=d['color'], markersize=18,
 #table.set_clip_on(False)
 #ax[0].add_patch(table)
 for i, (col, topic) in enumerate(color_names):
-    #ax[0].text(-.3, .2 - (i / 25), topic, color=col, weight='bold', fontsize=14)
+    #ax[0].text(-.3, .95 - (i / 25), topic, color=col, weight='bold', fontsize=14)
     ax[1].text(.6, .2 - (i / 25), topic, color=col, weight='bold', fontsize=14)
 
 # names/colors/current turn legend with wedge tracker
