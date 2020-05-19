@@ -119,11 +119,10 @@ markers = [plt.polar([.6], [i], marker='X', color=d['color'], markersize=18,
             for i, d in enumerate(players)]
 
 # explanatory table
-#table = mpatches.Rectangle((-.31, .74), .61, .24, fill=True, color='darkgray')
+#table = mpatches.Rectangle((.59, -.01), .56, .24, fill=True, color='darkgray')
 #table.set_clip_on(False)
-#ax[0].add_patch(table)
+#ax[1].add_patch(table)
 for i, (col, topic) in enumerate(color_names):
-    #ax[0].text(-.3, .95 - (i / 25), topic, color=col, weight='bold', fontsize=14)
     ax[1].text(.6, .2 - (i / 25), topic, color=col, weight='bold', fontsize=14)
 
 # names/colors/current turn legend with wedge tracker
@@ -132,6 +131,14 @@ for idx, player in enumerate(players):
                  weight='bold',
                  color=player['color'],
                  fontsize=18)
+    for i in range(6):
+        blank = mpatches.Rectangle(((.8 + i * .035),
+                                   .992 - (idx + 1) / 22),
+                                   .035, .025,
+                                   fill=False,
+                                   color='k')
+        blank.set_clip_on(False)
+        ax[1].add_patch(blank)
 token_idx = -1
 
 def get_closest(mx, my):
@@ -176,11 +183,12 @@ def on_key(event):
         # update this player as having collected this wedge
         if wedge_color in players[token_idx]['wedges']:
             return
-        wedge = mpatches.Rectangle((.78 + (len(players[token_idx]['wedges']) * .035),
+        wedge = mpatches.Rectangle((.8 + (len(players[token_idx]['wedges']) * .035),
                                    .992 - (token_idx + 1) / 22),
                                    .035, .025,
                                    fill=True,
                                    color=wedge_color)
+        wedge.set_clip_on(False)
         ax[1].add_patch(wedge)
         players[token_idx]['wedges'].add(wedge_color)
         event.canvas.draw()
