@@ -116,7 +116,6 @@ legend = plt.legend(loc='upper left', prop={'weight': 'bold', 'size':10},
 for i, l in enumerate(legend.get_texts()):
     l.set_color(players[i]['color'])
     l.set_text(f'{players[i]["name"]} -')
-ax = plt.gca().add_artist(legend)
 token_idx = -1
 
 def refresh(legend_obj):
@@ -144,8 +143,8 @@ def on_key(event):
     global mk_idx
     global current_tag
 
-    # only care about SPACE and 'w'
-    if not event.key in ' w':
+    # only care about SPACE, 'd', and 'w'
+    if not event.key in ' wd':
         return
 
     # remove annotation indicating starting location on a player's first roll
@@ -169,6 +168,16 @@ def on_key(event):
         players[token_idx]['wedges'].add(wedge_color)
         refresh(legend)
         event.canvas.draw_idle()
+        return
+
+    # 'd' -- roll the die
+    if event.key == 'd':
+        plt.text(0, 8, s='?', fontsize=18, weight='bold',
+                 bbox=dict(facecolor='gray'))
+        plt.pause(.5)
+        plt.text(0, 8, s=randrange(1, 7), color='k', fontsize=18,
+                 weight='bold', bbox=dict(facecolor='w'))
+        event.canvas.draw()
         return
 
     # SPACE -- start next player's turn
@@ -210,23 +219,12 @@ def on_key(event):
         mk_idx.set_data([x],[y])
         event.canvas.draw_idle()
     ud = plt.gcf().canvas.mpl_connect('pick_event', update)
-
-def on_press(event):
-    '''Right-click to roll the die, with a quick flash of red as feedback'''
-    if event.button == 3:
-        plt.text(0, 8, s='  ', fontsize=18, weight='bold',
-                 bbox=dict(facecolor='r'))
-        event.canvas.draw()
-        plt.text(0, 8, s=randrange(1, 7), color='k', fontsize=18,
-                 weight='bold', bbox=dict(facecolor='w'))
-        event.canvas.draw_idle()
-        return
+    return
 
 def start_action(event):
     print(f'Press SPACE to begin {players[0]["name"]}\'s turn')
 
 ud = plt.gcf().canvas.mpl_connect('pick_event', start_action)
-die_roll = plt.gcf().canvas.mpl_connect('button_press_event', on_press)
 token_key = plt.gcf().canvas.mpl_connect('key_press_event', on_key)
 
 plt.show()
