@@ -42,9 +42,15 @@ s_r, s_th = zip(*s_coords)
 s_r = np.asarray(s_r)
 s_th = np.asarray(s_th)
 
+# colors and categories for most editions
 color_names = [('brown', 'SCIENCE & NATURE'), ('green', 'SPORTS & LEISURE'),
                ('magenta', 'ARTS & ENTERTAINMENT'), ('yellow', 'HISTORY'),
                ('orange', 'WILD CARD'), ('blue', 'PEOPLE & PLACES')]
+# alternate color/category scheme
+#color_names = [('orange', 'SPORTS & LEISURE'), ('green', 'SCIENCE & TECHNOLOGY'),
+#               ('magenta', 'ENTERTAINMENT'), ('yellow', 'HISTORY'),
+#               ('purple', 'ARTS & LITERATURE'), ('blue', 'GEOGRAPHY')]
+
 spoke_colors = []
 # calculate colors of spoke spaces based on observed pattern and plotting order
 for i in [4, 2, 1, 5, 0]:
