@@ -87,10 +87,9 @@ rs = np.concatenate([p_r, s_r])
 lines = []
 
 # for 'manual' legend and key to topics
-fig, ax = plt.subplots(1, 2, figsize=(11, 9))
-plt.subplots_adjust(left=-0.1)
-ax[0].set_axis_off()
-ax[1].set_axis_off()
+fig, ax = plt.subplots(1, 1, figsize=(11, 9))
+plt.subplots_adjust(left=-.15)
+ax.set_axis_off()
 
 for col, idxs in d.items():
     line = plt.polar(p_th[idxs], p_r[idxs], 'H', markeredgecolor='k', picker=5,
@@ -119,26 +118,27 @@ markers = [plt.polar([.6], [i], marker='X', color=d['color'], markersize=18,
             for i, d in enumerate(players)]
 
 # explanatory table
-#table = mpatches.Rectangle((.59, -.01), .56, .24, fill=True, color='darkgray')
-#table.set_clip_on(False)
-#ax[1].add_patch(table)
+table = mpatches.Rectangle((.795, -.01), .245, .245, fill=True, color='darkgray')
+table.set_clip_on(False)
+ax.add_patch(table)
 for i, (col, topic) in enumerate(color_names):
-    ax[1].text(.6, .2 - (i / 25), topic, color=col, weight='bold', fontsize=14)
+    ax.text(.8, .2 - (i / 25), topic, color=col, weight='bold', fontsize=14)
 
 # names/colors/current turn legend with wedge tracker
 for idx, player in enumerate(players):
-    ax[1].text(.6, .99 - (idx + 1) / 22, player['name'],
+    ax.text(.8, .994 - (idx + 1) / 22, player['name'],
                  weight='bold',
                  color=player['color'],
-                 fontsize=18)
+                 fontsize=14)
+    # collected wedge placeholders
     for i in range(6):
-        blank = mpatches.Rectangle(((.8 + i * .035),
+        blank = mpatches.Rectangle(((.9 + i * .015),
                                    .992 - (idx + 1) / 22),
-                                   .035, .025,
+                                   .015, .025,
                                    fill=False,
                                    color='k')
         blank.set_clip_on(False)
-        ax[1].add_patch(blank)
+        ax.add_patch(blank)
 token_idx = -1
 
 def get_closest(mx, my):
@@ -163,13 +163,6 @@ def on_key(event):
     if not event.key in ' wd':
         return
 
-    # remove annotation indicating starting location on a player's first roll
-    # can be different error types
-    try:
-        current_tag.remove()
-    except:
-        pass
-
     # 'w' -- collect the wedge from this token's location
     if event.key == 'w':
         # coordinates of this wedge
@@ -183,13 +176,13 @@ def on_key(event):
         # update this player as having collected this wedge
         if wedge_color in players[token_idx]['wedges']:
             return
-        wedge = mpatches.Rectangle((.8 + (len(players[token_idx]['wedges']) * .035),
+        wedge = mpatches.Rectangle((.9 + (len(players[token_idx]['wedges']) * .015),
                                    .992 - (token_idx + 1) / 22),
-                                   .035, .025,
+                                   .015, .025,
                                    fill=True,
                                    color=wedge_color)
         wedge.set_clip_on(False)
-        ax[1].add_patch(wedge)
+        ax.add_patch(wedge)
         players[token_idx]['wedges'].add(wedge_color)
         event.canvas.draw()
         return
@@ -210,18 +203,25 @@ def on_key(event):
         marker.remove()
     except NameError:
         pass
+    # remove location tag for previous player
+    # probably don't need legend marker as long as this is updated
+    try:
+        current_tag.remove()
+    except:
+        pass
     token_idx += 1
     if token_idx == len(players):
         token_idx = 0
     # indicate this player's turn in legend
-    marker = ax[1].text(.57, .984 - (token_idx + 1) / 22, '*',
-                          weight='bold',
-                          color=players[token_idx]['color'],
+    #marker = ax.text(.78, .984 - (token_idx + 1) / 22, '*',
+    marker = ax.text(.78, .992 - (token_idx + 1) / 22, '\u261e',
+                          #color=players[token_idx]['color'],
+                          color='k',
                           fontsize=18)
     print(f'Team {players[token_idx]["name"]} to move')
     x, y = markers[token_idx].get_xydata()[0]
     label = markers[token_idx].get_label()
-    # indicate location of current token before first roll
+    # indicate location of current player's token
     current_tag = plt.annotate(label, xy=(x, y), weight='bold', color='k',
                                fontsize=12, bbox=dict(boxstyle='round,pad=0.2',
                                fc='w', alpha=0.7))
@@ -232,6 +232,8 @@ def on_key(event):
 
     # activate this player's turn; clicking a location will move their token
     def update(event):
+        # maintain location tag for current player
+        global current_tag
         try:
             current_tag.remove()
         except ValueError:
@@ -242,7 +244,10 @@ def on_key(event):
         if np.abs((np.pi * 2) - x) < .01:
             x = 0
         mk_idx.set_data([x], [y])
-        event.canvas.draw_idle()
+        current_tag = plt.annotate(label, xy=(x, y), weight='bold', color='k',
+                               fontsize=12, bbox=dict(boxstyle='round,pad=0.2',
+                               fc='w', alpha=0.7))
+        event.canvas.draw()
     ud = plt.gcf().canvas.mpl_connect('pick_event', update)
     return
 
