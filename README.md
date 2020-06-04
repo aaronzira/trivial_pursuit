@@ -28,4 +28,4 @@ Everything is controlled with the 'd' key, 'w' key, SPACE key, and LEFT MOUSE CL
 	- NOTE: accidentally pressing 'q' will close the plot.
 - **LEFT MOUSE CLICK**: choose the space to which the current team will move
 
-Current turn is indicated with an asterisk to the left of the team's name in the legend, as are colors of collected wedges
+Current turn is indicated with a marker next to that team's name in the legend, as are colors of that team's collected wedges
