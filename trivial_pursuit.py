@@ -15,7 +15,7 @@ args = parser.parse_args()
 
 assert all(len(name_color.split('_')) == 2
            for name_color in args.players_colors)
-players = [{'name': name_color.split('_')[0].upper(),
+players = [{'name': name_color.split('_')[0][:17].upper(),
             'color': name_color.split('_')[1],
             'wedges': set()}
            for name_color in args.players_colors]
@@ -131,14 +131,16 @@ for i, (col, topic) in enumerate(color_names):
     ax.text(.8, .2 - (i / 25), topic, color=col, weight='bold', fontsize=14)
 
 # names/colors/current turn legend with wedge tracker
+longest_name = max(len(p['name']) for p in players)
+offset = max(0, (longest_name - 4) / 100)
 for idx, player in enumerate(players):
     ax.text(.8, .994 - (idx + 1) / 22, player['name'],
-                 weight='bold',
                  color=player['color'],
+                 fontname='PT Mono',
                  fontsize=14)
     # collected wedge placeholders
     for i in range(6):
-        blank = mpatches.Rectangle(((.9 + i * .015),
+        blank = mpatches.Rectangle(((.846 + offset + i * .015),
                                    .992 - (idx + 1) / 22),
                                    .015, .025,
                                    fill=False,
@@ -182,7 +184,8 @@ def on_key(event):
         # update this player as having collected this wedge
         if wedge_color in players[token_idx]['wedges']:
             return
-        wedge = mpatches.Rectangle((.9 + (len(players[token_idx]['wedges']) * .015),
+        # adjust the first argument to account for long or short names
+        wedge = mpatches.Rectangle((.975 + (len(players[token_idx]['wedges']) * .015),
                                    .992 - (token_idx + 1) / 22),
                                    .015, .025,
                                    fill=True,
