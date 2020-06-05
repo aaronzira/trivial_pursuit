@@ -2,6 +2,9 @@
 
 A convenient way of allowing other players to see the board while playing over video calls
 
+<img src="finished_game.png" alt="Finished game"
+	title="Screenshot" width="686" height="546" />
+
 # Requirements
 
 - python >= 3.6
