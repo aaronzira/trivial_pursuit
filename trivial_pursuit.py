@@ -20,6 +20,11 @@ players = [{'name': name_color.split('_')[0][:17].upper(),
             'wedges': set()}
            for name_color in args.players_colors]
 
+# rectangular axes for legend, die rolls, and key to topics
+fig, ax = plt.subplots(1, 1, figsize=(11, 9))
+plt.subplots_adjust(left=-.15)
+ax.set_axis_off()
+
 # perimiter spaces
 p_coords = [(6, i * (2 * np.pi / 42)) for i in range(42)]
 p_coords.append((0, 0))
@@ -91,11 +96,6 @@ for i, col in enumerate(spoke_colors):
 thetas = np.concatenate([p_th, s_th])
 rs = np.concatenate([p_r, s_r])
 lines = []
-
-# for 'manual' legend and key to topics
-fig, ax = plt.subplots(1, 1, figsize=(11, 9))
-plt.subplots_adjust(left=-.15)
-ax.set_axis_off()
 
 for col, idxs in d.items():
     line = plt.polar(p_th[idxs], p_r[idxs], 'H', markeredgecolor='k', picker=5,
