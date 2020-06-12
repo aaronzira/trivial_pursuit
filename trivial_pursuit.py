@@ -132,7 +132,7 @@ for i, (col, topic) in enumerate(color_names):
 
 # names/colors/current turn legend with wedge tracker
 longest_name = max(len(p['name']) for p in players)
-offset = max(0, (longest_name - 4) / 100)
+offset = (longest_name - 4) / 100
 for idx, player in enumerate(players):
     ax.text(.8, .994 - (idx + 1) / 22, player['name'],
                  color=player['color'],
@@ -185,7 +185,7 @@ def on_key(event):
         if wedge_color in players[token_idx]['wedges']:
             return
         # adjust the first argument to account for long or short names
-        wedge = mpatches.Rectangle((.975 + (len(players[token_idx]['wedges']) * .015),
+        wedge = mpatches.Rectangle((.846 + offset + (len(players[token_idx]['wedges']) * .015),
                                    .992 - (token_idx + 1) / 22),
                                    .015, .025,
                                    fill=True,
