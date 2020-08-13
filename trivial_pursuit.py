@@ -56,7 +56,7 @@ s_r = np.asarray(s_r)
 s_th = np.asarray(s_th)
 
 # colors and categories for most editions
-color_names = [('brown', 'SCIENCE & NATURE'), ('green', 'SPORTS & LEISURE'),
+color_names = [('saddlebrown', 'SCIENCE & NATURE'), ('green', 'SPORTS & LEISURE'),
                ('magenta', 'ARTS & ENTERTAINMENT'), ('yellow', 'HISTORY'),
                ('orange', 'WILD CARD'), ('blue', 'PEOPLE & PLACES')]
 # alternate color/category scheme
