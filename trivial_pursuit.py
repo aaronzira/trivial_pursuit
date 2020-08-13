@@ -2,6 +2,8 @@ import argparse
 from collections import defaultdict
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from matplotlib.image import BboxImage
+from matplotlib.transforms import Bbox, TransformedBbox
 import numpy as np
 from operator import itemgetter
 from random import randrange
@@ -24,6 +26,12 @@ players = [{'name': name_color.split('_')[0][:17].upper(),
 fig, ax = plt.subplots(1, 1, figsize=(11, 9))
 plt.subplots_adjust(left=-.15)
 ax.set_axis_off()
+
+# images for rolling die
+dice = {i: plt.imread(f'images/{i}.png') for i in range(7)}
+bb = Bbox.from_bounds(.84, .46, .065, .1)
+bb2 = TransformedBbox(bb, ax.transData)
+bbox_image = BboxImage(bb2)
 
 # perimiter spaces
 p_coords = [(6, i * (2 * np.pi / 42)) for i in range(42)]
@@ -193,16 +201,21 @@ def on_key(event):
         wedge.set_clip_on(False)
         ax.add_patch(wedge)
         players[token_idx]['wedges'].add(wedge_color)
+        print(f'Collected {wedge_color} wedge')
         event.canvas.draw()
         return
 
     # 'd' -- roll the die
     if event.key == 'd':
-        plt.text(0, 8, s='?', fontsize=18, weight='bold',
-                 bbox=dict(facecolor='gray'))
+        # dice rolling indicator
+        bbox_image.set_data(dice[0])
+        ax.add_artist(bbox_image)
         plt.pause(.5)
-        plt.text(0, 8, s=randrange(1, 7), color='k', fontsize=18,
-                 weight='bold', bbox=dict(facecolor='w'))
+        # new roll
+        roll = randrange(1, 7)
+        print(f'Rolled a {roll}')
+        bbox_image.set_data(dice[roll])
+        ax.add_artist(bbox_image)
         event.canvas.draw()
         return
 
